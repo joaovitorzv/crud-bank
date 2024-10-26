@@ -34,7 +34,6 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
-        restart: true
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile.prod
