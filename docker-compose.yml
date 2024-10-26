@@ -30,6 +30,7 @@ services:
 
   api:
     container_name: api
+    image: ghcr.io/joaovitorzv/crud-bank:latest
     depends_on:
       mongodb:
         condition: service_healthy
