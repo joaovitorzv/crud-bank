@@ -1,0 +1,21 @@
+type Option {
+  name: String
+  group: String
+}
+
+type Query {
+  hello(name: String): String
+  options(id: String!): [Option]
+}
+
+type Query {
+  else: String
+}
+
+type User {
+  name: String!
+}
+
+type Mutation {
+  addUser(user: User): User
+}

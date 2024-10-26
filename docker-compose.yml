@@ -1,0 +1,55 @@
+services:
+  # TODO: bring this back when we have a web app
+  # web:
+  #   container_name: web
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/web/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
+  #   networks:
+  #     - app_network
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    restart: always
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: woovipass
+    ports:
+      - 27017:27017
+    networks:
+      - app_network
+
+  api:
+    container_name: api
+    depends_on:
+      mongodb:
+        condition: service_healthy
+        restart: true
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile.prod
+    restart: always
+    ports:
+      - 3001:3001
+    networks:
+      - app_network
+    develop:
+      watch:
+        - path: ./apps/api
+          target: /app/apps/api
+          action: rebuild
+
+# Define a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+networks:
+  app_network:
+    external: true
