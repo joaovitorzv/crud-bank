@@ -14,9 +14,10 @@ _Decisions:_
 - [x] add tests
 - [x] Containerize app
 - [x] Setup mongoDB
-- [] test mutation/query storing data
+- [x] test mutation/query storing data
 - [] setup CI/CD
 - [] deploy app
+- [] remove unused stuff from repo template
 - [] Plan project architecture
 
 https://docs.docker.com/guides/nodejs/configure-ci-cd/
