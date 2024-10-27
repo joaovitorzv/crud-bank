@@ -15,11 +15,6 @@ services:
     container_name: mongodb
     image: mongo:latest
     restart: always
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: woovipass
@@ -33,7 +28,7 @@ services:
     image: ghcr.io/joaovitorzv/crud-bank:latest
     depends_on:
       mongodb:
-        condition: service_healthy
+        condition: service_started
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile.prod
