@@ -5,6 +5,8 @@ on:
     branches:
       - main
 
+permissions: write-all
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -55,12 +57,32 @@ jobs:
           docker-compose build
           docker-compose push
 
+      - name: Debug mock Secrets
+        run: |
+          if [ -n "${{ secrets.HOST }}" ]; then
+            echo "HOST is set"
+          else
+            echo "HOST is not set"
+          fi
+          if [ -n "${{ secrets.USERNAME }}" ]; then
+            echo "USERNAME is set"
+          else
+            echo "USERNAME is not set"
+          fi
+          if [ -n "${{ secrets.SSH_KEY }}" ]; then
+            echo "SSH_KEY is set"
+          else
+            echo "SSH_KEY is not set"
+          fi
+
       - name: Deploy to GCP VM
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.GCP_HOST }}
           username: ${{ secrets.GCP_USERNAME }}
           key: ${{ secrets.GCP_SSH_KEY }}
+          port: 22
+          debug: true
           script: |
             docker-compose -f docker-compose.yml pull
             docker-compose -f docker-compose.yml up -d
